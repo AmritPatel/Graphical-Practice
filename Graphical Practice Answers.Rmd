@@ -69,6 +69,7 @@ rearAndFlank %>% kable(caption = "Number, type, and location of troops who broke
 return <- read_gsheet(data_loc, "return")
 return %>% kable(caption = "Number of troops returning toward Kovno with additional data.") 
 ```
+
 Next, we can make some plots.
 
 ```{r, fig.cap = "Troop numbers advancing toward Moscow, then returning to Kovno."}
@@ -84,9 +85,11 @@ advanceReturn$city <-
 
 advanceReturn$troops <- as.numeric(advanceReturn$troops)
 
-ggplot(advanceReturn %>% na.omit(), aes(city, troops, color = type)) + geom_point() +
+ggplot(advanceReturn %>% na.omit(), aes(city, troops, color = type)) +
+  geom_point() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 ```
+
 ```{r, fig.cap = "Looking for temperature effects. Interesting jump in deaths on coldest night!"}
 return$troops <- as.numeric(return$troops)
 return$temp <- as.numeric(return$temp)
