@@ -1,0 +1,56 @@
+---
+title: "Graphical Practice Example"
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout: default
+---
+
+```{r, echo = FALSE}
+library(tufte)
+```
+
+
+# Narrative Graphics of Space and Time 
+
+`r newthought("An especially effective device")` for enhancing the explanatory power of time-series displays is to add spatial dimensions to the design of the graphic, so that the data are moving over space (in two or three dimensions) as well as over time. Excellent space-time-story graphics illustrate here how multivariate complexity can be subtly integrated into graphical architecture, integrated so gently and unobtrusively that viewers are hardly aware that they are looking into a world of four or five dimensions. Occasionally graphics are belligerently multivariate, advertising the technique rather than the data. But not this one.
+
+The classic figure below of Charles Joseph Minard (1781-1870), the French engineer, shows the terrible fate of Napoleon's army in Russia. Described by E.J. Marey as seeming to defy the pen of the historian by its brutal eloquence,[^1] this combination of data map and time-series, drawn in 1869, portrays a sequence of devastating losses suffered in Napoleon's Russian campaign of 1812. Beginning at left on the Polish-Russian border near the Niemen River, the thick tan flow-line shows the size of the Grand Army (422,000) as it invaded Russia in June 1812. The width of this band indicates the size of the army at each place on the map. In September, the army reached Moscow, which was by then sacked and deserted, with 100,000 men. The path of Napoleon's retreat from Moscow is depicted by the darker, lower band, which is linked to a temperature scale and dates at the bottom of the chart. It was a bitterly cold winter, and many froze on the march out of Russia. As the graphic shows, the crossing of the Berezina River was a disaster, and the army finally struggled back into Poland with only 10,000 men remaining. Also shown are the movements of auxiliary troops, as they sought to protect the rear and the flank of the advancing army. Minard's graphic tells a rich, coherent story with its multivariate data, far more enlightening than just a single number bouncing along over time. Six variables are plotted: the size of the army, its location on a two-dimensional surface, direction of the army's movement, and temperature on various dates during the retreat from Moscow. Minard's French original was printed as a two-color lithograph in the form of a small poster.
+
+It may well be the best statistical graphic ever drawn.
+
+[^1]: E. J. Marey, *La méthode graphique* (Paris, 1885), 73. For more on Minard, see Arthur H. Robinson, "The Thematic Maps of Charles Joseph Minard," *Imago Mundi*, 21 (1967), 95-108.
+
+::: {.fullwidth}
+![](./redrawnMinardNapoleonInvasion.jpg)
+:::
+
+```{marginfigure}
+Image from *Charles Joseph Minard Tableaux Graphiques et Cartes Figuratives de M. Minard, 1845-1869*, Bibliothéque de l'École Nationale des Ponts et Chaussées, Paris, item 28 (62 by 25 cm, or by in). English translation by Dawn Finley and redrawing by Elaine Morse, completed August 2002. 
+```
+
+::: {.fullwidth}
+The figure's caption reads as follows:
+
+The numbers of men present are represented by the widths of the colored zones at a rate of one millimeter for every 10,000 men; they are further written across the zones. The red designates the men who enter into Russia, the black those who leave it.
+
+The information which has served to draw up the map has been extracted from the works of M. M. Chiers, of Segur, of Frezensac, of Chambray and the unpublished diary of Jacob, the pharmacist of the Army since October 28th. In order to better judge with the eye the diminution of the army, I have assumed that the troops of Prince Jérome and of Marshal Davoush who had been detached at Minsknd Moghilev and have rejoined around Orcha and Vitebsk, had always marched with the army.
+:::
+
+# Exercises
+
+1. What two-dimensional datasets do you find in Minard's figure?
+
+* 
+*
+* 
+* 
+*
+*
+
+2. Create at least a few alternative figures of your own using the data you've found using your plotting tool of choice.
+
+3. Compare Minard's figure to yours. Reflect on the legendary status of Minard's figure.
+
+```{marginfigure}
+This excerpt and exercise was adapted from Edward Tufte's *The visual display of quantitative information,* 2001, for educational purposes only.
+```
