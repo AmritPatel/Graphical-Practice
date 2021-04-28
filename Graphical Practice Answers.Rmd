@@ -27,17 +27,13 @@ It may well be the best statistical graphic ever drawn.
 ![](./redrawnMinardNapoleonInvasion.jpg)
 :::
 
-```{marginfigure}
-Image from *Charles Joseph Minard Tableaux Graphiques et Cartes Figuratives de M. Minard, 1845-1869*, Bibliothéquede l'École Nationale des Ponts et Chaussées, Paris, item 28 (62 by 25 cm, or by in). English translation by Dawn Finley and redrawing by Elaine Morse, completed August 2002. 
-```
+`r margin_note("Image from *Charles Joseph Minard Tableaux Graphiques et Cartes Figuratives de M. Minard, 1845-1869*, Bibliothéquede l'École Nationale des Ponts et Chaussées, Paris, item 28 (62 by 25 cm, or by in). English translation by Dawn Finley and redrawing by Elaine Morse, completed August 2002.")`
 
-::: {.fullwidth}
 The figure's caption reads as follows:
 
-The numbers of men present are represented by the widths of the colored zones at a rate of one millimeter for every 10,000 men; they are further written across the zones. The red designates the men who enter into Russia, the black those who leave it.
+> The numbers of men present are represented by the widths of the colored zones at a rate of one millimeter for every 10,000 men; they are further written across the zones. The red designates the men who enter into Russia, the black those who leave it.
 
-The information which has served to draw up the map has been extracted from the works of M. M. Chiers, of Segur, of Frezensac, of Chambray and the unpublished diary of Jacob, the pharmacist of the Army since October 28th. In order to better judge with the eye the diminution of the army, I have assumed that the troops of Prince Jérome and of Marshal Davoush who had been detached at Minsknd Moghilev and have rejoined around Orcha and Vitebsk, had always marched with the army.
-:::
+> The information which has served to draw up the map has been extracted from the works of M. M. Chiers, of Segur, of Frezensac, of Chambray and the unpublished diary of Jacob, the pharmacist of the Army since October 28th. In order to better judge with the eye the diminution of the army, I have assumed that the troops of Prince Jérome and of Marshal Davoush who had been detached at Minsknd Moghilev and have rejoined around Orcha and Vitebsk, had always marched with the army.
 
 # Exercises
 
@@ -138,6 +134,4 @@ Graphical excellence is nearly always multivariate.
 
 And graphical excellence requires telling the truth about the data.
 
-```{marginfigure}
-This excerpt and exercise was adapted from Edward Tufte's *The visual display of quantitative information,* 2001, for educational purposes only.
-```
+`r margin_note("Brief and slightly modified excerpts were adapted from Edward Tufte's *The visual display of quantitative information,* 2001, and is for educational purposes only.")`
