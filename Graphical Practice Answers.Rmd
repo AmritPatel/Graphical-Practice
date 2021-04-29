@@ -95,7 +95,7 @@ ggplot(advanceReturn, aes(city, troops, color = temp, label = type, label2 = not
   scale_colour_gradient(high = "#132B43", low = "#56B1F7")
 ```
 
-`r margin_note("Looking for temperature effects. Interesting jump in deaths on coldest night! Note that in general, it is better to normalize results when showing changes. This means showing deaths as a percent change instead of the actual number of deaths. This matters because as the number of troops die, there are less available to die. This means that there will be less deaths over time simply because there are less troops alive. Normalizing these numbers allows for trends to be captured accurately. This idea of normalizing (or lack of) comes up a lot! When comparing numbes across populations (e.g., COVID-19 number of people infected) it is of utmost importance to report numbers per capita. Can you see why?")`
+`r margin_note("Looking for temperature effects. Interesting jump in deaths on coldest night! Note that in general, it is better to normalize results when showing changes. This means showing deaths as a percent change instead of the actual number of deaths. This matters because as the number of troops die, there are less available to die. This means that there will be less deaths over time simply because there are less troops alive. Normalizing these numbers allows for trends to be captured accurately. This idea of normalizing (or lack of) comes up a lot! When comparing numbers across populations (e.g., number of people infected with COVID-19 by country) it is of utmost importance to report numbers per capita. Can you see why?")`
 
 ```{r, fig.cap = ""}
 return$troops <- as.numeric(return$troops)
