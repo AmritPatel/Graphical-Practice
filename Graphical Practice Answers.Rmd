@@ -24,8 +24,14 @@ It may well be the best statistical graphic ever drawn.
 [^1]: E. J. Marey, *La méthode graphique* (Paris, 1885), 73. For more on Minard, see Arthur H. Robinson, "The Thematic Maps of Charles Joseph Minard," *Imago Mundi*, 21 (1967), 95-108.
 
 ::: {.fullwidth}
-![Reproduction of Minard's famous graphic showing how Napoleon's 1812 invasion of Russia progressed with emphasis on catastrophic decline in troop numbers from beginning to end likely accelerated by below freezing temperatures.](./redrawnMinardNapoleonInvasion.jpg)
+![](./redrawnMinardNapoleonInvasion.jpg)
 :::
+
+```{r}
+# Caption accessibility
+# Reproduction of Minard's famous graphic showing how Napoleon's 1812 invasion of Russia progressed with emphasis on catastrophic decline in troop numbers from beginning to end likely accelerated by below freezing temperatures.
+```
+
 
 `r margin_note("Image from *Charles Joseph Minard Tableaux Graphiques et Cartes Figuratives de M. Minard, 1845-1869*, Bibliothéquede l'École Nationale des Ponts et Chaussées, Paris, item 28 (62 by 25 cm, or by in). English translation by Dawn Finley and redrawing by Elaine Morse, completed August 2002.")`
 
@@ -77,7 +83,7 @@ Next, we can make some plots.
 
 `r margin_note("Troop numbers advancing toward Moscow, then returning to Kovno with temperature data where available.")`
 
-```{r, fig.cap = ""}
+```{r}
 # Combo of advance and return data to show the decline in troops as the war progresses.
 advanceReturn <-
 bind_rows(advance %>% mutate(type = "advance", temp = NA, notes = NA) %>% select(city, temp, troops, type),
@@ -107,7 +113,7 @@ ggplot(advanceReturn %>% filter(city != "NA"), aes(city, troops, color = temp, l
 
 `r margin_note("Looking for temperature effects. Interesting jump in deaths on coldest night! Note that in general, it is better to normalize results when showing changes. This means showing deaths as a percent change instead of the actual number of deaths. This matters because as the number of troops die, there are less available to die. This means that there will be less deaths over time simply because there are less troops alive. Normalizing these numbers allows for trends to be captured accurately. This idea of normalizing (or lack of) comes up a lot! When comparing numbers across populations (e.g., number of people infected with COVID-19 by country) it is of utmost importance to report numbers per capita. Can you see why?")`
 
-```{r, fig.cap = ""}
+```{r}
 # More data type fixes for plotting.
 return$troops <- as.numeric(return$troops)
 return$temp <- as.numeric(return$temp)
@@ -160,7 +166,12 @@ Graphical excellence consists of complex ideas communicated with clarity, precis
 
 Graphical excellence is that which gives to the viewer the greatest number of ideas in the shortest time with the least ink in the smallest space.
 
-![Scanned image from Tufte's text illustrating priciples of graphical excellence.](./graphicalExcellence.jpg)
+![](./graphicalExcellence.jpg)
+```{r}
+# Caption accessibility
+# Scanned image from Tufte's text illustrating priciples of graphical excellence.
+```
+
 
 Graphical excellence is nearly always multivariate.
 
