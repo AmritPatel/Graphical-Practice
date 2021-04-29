@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = F, message = F, warning = F)
 ```
 
 ```{r, echo = FALSE}
-library(tufte)
+library(tufte) # Needed for newthought and margin_note calls
 ```
 
 # Narrative Graphics of Space and Time 
@@ -24,7 +24,7 @@ It may well be the best statistical graphic ever drawn.
 [^1]: E. J. Marey, *La méthode graphique* (Paris, 1885), 73. For more on Minard, see Arthur H. Robinson, "The Thematic Maps of Charles Joseph Minard," *Imago Mundi*, 21 (1967), 95-108.
 
 ::: {.fullwidth}
-![](./redrawnMinardNapoleonInvasion.jpg)
+![Reproduction of Minard's famous graphic showing how Napoleon's 1812 invasion of Russia progressed with emphasis on catastrophic decline in troop numbers from beginning to end likely accelerated by below freezing temperatures.](./redrawnMinardNapoleonInvasion.jpg)
 :::
 
 `r margin_note("Image from *Charles Joseph Minard Tableaux Graphiques et Cartes Figuratives de M. Minard, 1845-1869*, Bibliothéquede l'École Nationale des Ponts et Chaussées, Paris, item 28 (62 by 25 cm, or by in). English translation by Dawn Finley and redrawing by Elaine Morse, completed August 2002.")`
@@ -51,17 +51,20 @@ The figure's caption reads as follows:
 It is first instructive to collect observed data and put it into tables.
 
 ```{r}
-library(tidyverse)
 library(googlesheets4)
+library(tidyverse)
 library(kableExtra)
 
+# Raw data import from Google Sheets
 gs4_deauth()
 data_loc <- "https://docs.google.com/spreadsheets/d/1sDJeCLtLGNvBLb6_NJW-fuas2T3UU_Yi7DOCCQqO3ps"
+
+# Function to grab data from sheet
 read_gsheet <- function(data_location, sheet_id){
       googlesheets4::read_sheet(data_location, sheet = sheet_id, skip = 0, col_types = "c")
 }
 
-# Present various tables from graphical data
+# Present simple tables of data extracted manually from Minard's graphic
 advance <- read_gsheet(data_loc, "advance")
 advance %>% kable(caption = "Number of troops advancing toward Moscow.")
 rearAndFlank <- read_gsheet(data_loc, "rearAndFlank")
@@ -75,6 +78,7 @@ Next, we can make some plots.
 `r margin_note("Troop numbers advancing toward Moscow, then returning to Kovno with temperature data where available.")`
 
 ```{r, fig.cap = ""}
+# Combo of advance and return data to show the decline in troops as the war progresses.
 advanceReturn <-
 bind_rows(advance %>% mutate(type = "advance", temp = NA, notes = NA) %>% select(city, temp, troops, type),
           return  %>% mutate(type = "return")  %>% select(city, temp, troops, type, notes)
@@ -83,46 +87,64 @@ bind_rows(advance %>% mutate(type = "advance", temp = NA, notes = NA) %>% select
 # Need a custom ordering for the graphic to work. X-axis proceeds geographically.
 advanceReturn$city <- 
   factor(advanceReturn$city,
-         levels=c("kovno","vilna","molodechno","minsk","bobr","vitebsk","orcha","smolensk","dorobouj","viarma","gjat","maroyaraslovets","moscow")
+         levels=c(
+           "kovno","vilna","molodechno","minsk","bobr",
+           "vitebsk","orcha","smolensk","dorobouj",
+           "viarma","gjat","maroyaraslovets","moscow"
+           )
          )
 
+# Numeric conversions necessitated by data import default to character.
 advanceReturn$temp <- as.numeric(advanceReturn$temp)
 advanceReturn$troops <- as.numeric(advanceReturn$troops)
 
-ggplot(advanceReturn, aes(city, troops, color = temp, label = type, label2 = notes)) +
+# Extra fields exploring plotly's potential to elevate the graphic. However, plotly doesn't play well on mobile.
+ggplot(advanceReturn %>% filter(city != "NA"), aes(city, troops, color = temp, label = type, label2 = notes)) +
   geom_point() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
-  scale_colour_gradient(high = "#132B43", low = "#56B1F7")
+  scale_colour_gradient(high = "#132B43", low = "#56B1F7") # Switched the color gradient to match intuition
 ```
 
 `r margin_note("Looking for temperature effects. Interesting jump in deaths on coldest night! Note that in general, it is better to normalize results when showing changes. This means showing deaths as a percent change instead of the actual number of deaths. This matters because as the number of troops die, there are less available to die. This means that there will be less deaths over time simply because there are less troops alive. Normalizing these numbers allows for trends to be captured accurately. This idea of normalizing (or lack of) comes up a lot! When comparing numbers across populations (e.g., number of people infected with COVID-19 by country) it is of utmost importance to report numbers per capita. Can you see why?")`
 
 ```{r, fig.cap = ""}
+# More data type fixes for plotting.
 return$troops <- as.numeric(return$troops)
 return$temp <- as.numeric(return$temp)
 return$date <- as.Date(return$date)
 
+# Keep date, temp, and troop data and convert to long format data necessary for faceting.
 returnCompare <-
   return %>%
   select(date, temperatureInDegreesRankine=temp, troops) %>%
   reshape2::melt(id.vars = c("date"), value.name = "value") %>%
   na.omit()
 
+# Percent deaths from one point to the next is calculated in a separate dataframe because
+# using dplyr:lag only works for sequential pairs of data without NAs. Due to the
+# inconsistency of data reporting, this is the case here. It is re-combined in next step.
 returnCompareDiff <-
   return %>%
   select(date, troops) %>%
-  na.omit() %>%
+  # Here is the NA removal step that is necessary in this dataset and not the above.
+  na.omit() %>% 
   mutate(percentDeaths = (lag(troops) - troops) / lag(troops) * 100) %>%
-  select(-troops) %>%
+  # troops data already in above dataset so it's removed.
+  select(-troops) %>% 
   reshape2::melt(id.vars = c("date"), value.name = "value")
 
+# Re-combine separately processed datasets.
 pltReturn <- bind_rows(returnCompare, returnCompareDiff)
 
+# Re-order facets by creating custom factor levels.
 pltReturn$variable = factor(pltReturn$variable, levels=c('troops', 'temperatureInDegreesRankine', 'percentDeaths'))
 
 ggplot(pltReturn, aes(date, value)) +
+  # Keep actual data points...
   geom_point() +
+  # ...but also make data features more obvious.
   geom_line() +
+  # Vertical faceting facilitates time-based comparisons and possible connections.
   facet_wrap(~variable, scales = "free_y", dir = "v")
 ```
 
@@ -138,7 +160,7 @@ Graphical excellence consists of complex ideas communicated with clarity, precis
 
 Graphical excellence is that which gives to the viewer the greatest number of ideas in the shortest time with the least ink in the smallest space.
 
-![](./graphicalExcellence.jpg)
+![Scanned image from Tufte's text illustrating priciples of graphical excellence.](./graphicalExcellence.jpg)
 
 Graphical excellence is nearly always multivariate.
 
