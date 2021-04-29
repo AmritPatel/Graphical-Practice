@@ -72,25 +72,37 @@ return %>% kable(caption = "Number of troops returning toward Kovno with additio
 
 Next, we can make some plots.
 
-```{r, fig.cap = "Troop numbers advancing toward Moscow, then returning to Kovno."}
+`r margin_note("Troop numbers advancing toward Moscow, then returning to Kovno with temperature data where available.")`
+
+```{r, fig.cap = ""}
+library(plotly)
+
 advanceReturn <-
-bind_rows(advance %>% mutate(type = "advance") %>% select(city, troops, type),
-          return  %>% mutate(type = "return")  %>% select(city, troops, type)
+bind_rows(advance %>% mutate(type = "advance", temp = NA, notes = NA) %>% select(city, temp, troops, type),
+          return  %>% mutate(type = "return")  %>% select(city, temp, troops, type, notes)
           )
 
+# Need a custom ordering for the graphic to work. X-axis proceeds geographically.
 advanceReturn$city <- 
   factor(advanceReturn$city,
          levels=c("kovno","vilna","molodechno","minsk","bobr","vitebsk","orcha","smolensk","dorobouj","viarma","gjat","maroyaraslovets","moscow")
          )
 
+advanceReturn$temp <- as.numeric(advanceReturn$temp)
 advanceReturn$troops <- as.numeric(advanceReturn$troops)
 
-ggplot(advanceReturn %>% na.omit(), aes(city, troops, color = type)) +
+p <- 
+ggplot(advanceReturn, aes(city, troops, color = temp, label = type, label2 = notes)) +
   geom_point() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+  scale_colour_gradient(high = "#132B43", low = "#56B1F7")
+
+ggplotly(p)
 ```
 
-```{r, fig.cap = "Looking for temperature effects. Interesting jump in deaths on coldest night!"}
+`r margin_note("Looking for temperature effects. Interesting jump in deaths on coldest night! Note that in general, it is better to normalize results when showing changes. This means showing deaths as a percent change instead of the actual number of deaths. This matters because as the number of troops die, there are less available to die. This means that there will be less deaths over time simply because there are less troops alive. Normalizing these numbers allows for trends to be captured accurately. This idea of normalizing (or lack of) comes up a lot! When comparing numbes across populations (e.g., COVID-19 number of people infected) it is of utmost importance to report numbers per capita. Can you see why?")`
+
+```{r, fig.cap = ""}
 return$troops <- as.numeric(return$troops)
 return$temp <- as.numeric(return$temp)
 return$date <- as.Date(return$date)
@@ -105,18 +117,21 @@ returnCompareDiff <-
   return %>%
   select(date, troops) %>%
   na.omit() %>%
-  mutate(deaths = lag(troops) - troops) %>%
+  mutate(percentDeaths = (lag(troops) - troops) / lag(troops) * 100) %>%
   select(-troops) %>%
   reshape2::melt(id.vars = c("date"), value.name = "value")
 
 pltReturn <- bind_rows(returnCompare, returnCompareDiff)
 
-pltReturn$variable = factor(pltReturn$variable, levels=c('troops', 'temperatureInDegreesRankine', 'deaths'))
+pltReturn$variable = factor(pltReturn$variable, levels=c('troops', 'temperatureInDegreesRankine', 'percentDeaths'))
 
+q <-
 ggplot(pltReturn, aes(date, value)) +
   geom_point() +
   geom_line() +
   facet_wrap(~variable, scales = "free_y", dir = "v")
+
+ggplotly(q)
 ```
 
 3. Compare Minard's figure to yours. Reflect on the legendary status of Minard's figure.
